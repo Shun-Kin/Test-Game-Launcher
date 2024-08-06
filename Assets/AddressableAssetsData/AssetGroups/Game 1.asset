@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Game 1
+  m_EditorClassIdentifier: 
+  m_GroupName: Game 1
+  m_Data:
+    m_SerializedData: []
+  m_GUID: d8d88e945918c1d49a27add36ae44fb8
+  m_SerializeEntries:
+  - m_GUID: 4d350b5549d35644f92cb4a434bf0640
+    m_Address: Assets/Scenes/Game 1.unity
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game 1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 72c43cd7533b9d14c9a7190e249a0b17
+    m_Address: Assets/Game 1/Sprites/cat.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game 1
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 63651bc63d63281488a4049ee1e94a5a, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 0c810a5d85552b146b6e0077d74253ed, type: 2}
+    - {fileID: 11400000, guid: f18e295bc35702b429c762359c584737, type: 2}

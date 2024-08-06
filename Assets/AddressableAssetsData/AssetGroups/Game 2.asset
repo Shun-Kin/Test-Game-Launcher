@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Game 2
+  m_EditorClassIdentifier: 
+  m_GroupName: Game 2
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 3f74a793e1e07414f80e937a2035eb7d
+  m_SerializeEntries:
+  - m_GUID: 88a92a81ff9cf6c43b175ab96d9f69a8
+    m_Address: Assets/Game 2/Prefabs/Rio.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game 2
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5c8c183423e90ba418a7a2a26fd0e7b6
+    m_Address: Assets/Game 2/Prefabs/Building_Bar.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game 2
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2e60603a5a223014e89d87f0ca228f73
+    m_Address: Assets/Scenes/Game 2.unity
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game 2
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 63651bc63d63281488a4049ee1e94a5a, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 18605835a6425054e80a8ed9f587ebb6, type: 2}
+    - {fileID: 11400000, guid: 5535fbf40101e8141ae076d9ec6a2b61, type: 2}
