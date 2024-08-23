@@ -12,7 +12,7 @@ public class LauncherManager : MonoBehaviour
     private async void Start()
     {
         addressablesManager = GetComponentInParent<AddressablesManager>();
-        if (await DataManager.SignInAsync())    // Игрок смог войти/подключиться или уже вошёл
+        if (await DataManager.SignInAsync())    // РРіСЂРѕРє СЃРјРѕРі РІРѕР№С‚Рё/РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ РёР»Рё СѓР¶Рµ РІРѕС€С‘Р»
         {
             foreach (GameButtons button in buttons)
             {
@@ -20,14 +20,14 @@ public class LauncherManager : MonoBehaviour
             }
         }
 
-        buttons[0].start.interactable = await addressablesManager.InCacheAsync(addressablesManager.sceneBinds[0].label);    // Проверить наличие ассетов игр в кэше (проверяется по очереди)
+        buttons[0].start.interactable = await addressablesManager.InCacheAsync(addressablesManager.sceneBinds[0].label);    // РџСЂРѕРІРµСЂРёС‚СЊ РЅР°Р»РёС‡РёРµ Р°СЃСЃРµС‚РѕРІ РёРіСЂ РІ РєСЌС€Рµ (РїСЂРѕРІРµСЂСЏРµС‚СЃСЏ РїРѕ РѕС‡РµСЂРµРґРё)
         buttons[1].start.interactable = await addressablesManager.InCacheAsync(addressablesManager.sceneBinds[1].label);
     }
 
     private async void DownloadGame(int index)
     {
         buttons[index].download.interactable = false;
-        buttons[index].start.interactable = await addressablesManager.DownloadAssetsAsync(addressablesManager.sceneBinds[index].label); // Скачать ассеты игры с сервера
+        buttons[index].start.interactable = await addressablesManager.DownloadAssetsAsync(addressablesManager.sceneBinds[index].label); // РЎРєР°С‡Р°С‚СЊ Р°СЃСЃРµС‚С‹ РёРіСЂС‹ СЃ СЃРµСЂРІРµСЂР°
         buttons[index].download.interactable = true;
     }
 
@@ -35,13 +35,13 @@ public class LauncherManager : MonoBehaviour
     {
         buttons[index].unload.interactable = false;
         buttons[index].start.interactable = false;
-        await addressablesManager.UnloadAssetsCacheAsync(addressablesManager.sceneBinds[index].label);  // Очистить кэш игры
+        await addressablesManager.UnloadAssetsCacheAsync(addressablesManager.sceneBinds[index].label);  // РћС‡РёСЃС‚РёС‚СЊ РєСЌС€ РёРіСЂС‹
         buttons[index].unload.interactable = true;
     }
 
     private void StartGame(int index)
     {
-        addressablesManager.LoadScene(addressablesManager.sceneBinds[index].reference); // Загрузить сцену игры
+        addressablesManager.LoadScene(addressablesManager.sceneBinds[index].reference); // Р—Р°РіСЂСѓР·РёС‚СЊ СЃС†РµРЅСѓ РёРіСЂС‹
     }
 
     // Game 1

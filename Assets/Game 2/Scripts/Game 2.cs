@@ -23,7 +23,7 @@ public class Game2 : MonoBehaviour
         character = Instantiate((GameObject)addressablesManager.assetBinds[characterAssetIndex].reference.Asset).GetComponent<CharacterScript>();
         characterTransform = character.transform;
         bestTime = await DataManager.LoadDataAsync<float>("bestTime");
-        if (bestTime == default)    // Оффлайн режим (можно сообщить об этом игроку)
+        if (bestTime == default)    // РћС„С„Р»Р°Р№РЅ СЂРµР¶РёРј (РјРѕР¶РЅРѕ СЃРѕРѕР±С‰РёС‚СЊ РѕР± СЌС‚РѕРј РёРіСЂРѕРєСѓ)
         {
             bestTime = float.MaxValue;
         }
@@ -39,9 +39,9 @@ public class Game2 : MonoBehaviour
         if (currentTime < bestTime)
         {
             bestTime = currentTime;
-            _ = DataManager.SaveDataAsync("bestTime", bestTime);    // При ошибке сети не сохранится (можно обработать, сообщив от этом игроку)
+            _ = DataManager.SaveDataAsync("bestTime", bestTime);    // РџСЂРё РѕС€РёР±РєРµ СЃРµС‚Рё РЅРµ СЃРѕС…СЂР°РЅРёС‚СЃСЏ (РјРѕР¶РЅРѕ РѕР±СЂР°Р±РѕС‚Р°С‚СЊ, СЃРѕРѕР±С‰РёРІ РѕС‚ СЌС‚РѕРј РёРіСЂРѕРєСѓ)
         }
-        timeText.text = $"Время: {currentTime:f1}с\r\n\r\nЛучшее время: {bestTime:f1}с";
+        timeText.text = $"Р’СЂРµРјСЏ: {currentTime:f1}СЃ\r\n\r\nР›СѓС‡С€РµРµ РІСЂРµРјСЏ: {bestTime:f1}СЃ";
     }
 
     public static void ShowResult()
@@ -51,7 +51,7 @@ public class Game2 : MonoBehaviour
 
     public void StartGame()
     {
-        characterTransform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);   // Переместить игрока в исходную точку
+        characterTransform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);   // РџРµСЂРµРјРµСЃС‚РёС‚СЊ РёРіСЂРѕРєР° РІ РёСЃС…РѕРґРЅСѓСЋ С‚РѕС‡РєСѓ
         Cursor.lockState = CursorLockMode.Locked;
         resultPanel.SetActive(false);
         character.CanMove(true);

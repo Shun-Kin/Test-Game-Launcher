@@ -15,7 +15,7 @@ public class AddressablesManager : MonoBehaviour
 
     public async Task<bool> InCacheAsync(object key)
     {
-        AsyncOperationHandle<long> opHandle = Addressables.GetDownloadSizeAsync(key);   // Проверка обновлений каталогов происходит автоматически при инициализации Addressables, можно проверить вручную (Addressable Asset Settings -> Only update catalogs manually https://docs.unity3d.com/Packages/com.unity.addressables@1.20/manual/LoadContentCatalogAsync.html#updating-catalogs)
+        AsyncOperationHandle<long> opHandle = Addressables.GetDownloadSizeAsync(key);   // РџСЂРѕРІРµСЂРєР° РѕР±РЅРѕРІР»РµРЅРёР№ РєР°С‚Р°Р»РѕРіРѕРІ РїСЂРѕРёСЃС…РѕРґРёС‚ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РїСЂРё РёРЅРёС†РёР°Р»РёР·Р°С†РёРё Addressables, РјРѕР¶РЅРѕ РїСЂРѕРІРµСЂРёС‚СЊ РІСЂСѓС‡РЅСѓСЋ (Addressable Asset Settings -> Only update catalogs manually https://docs.unity3d.com/Packages/com.unity.addressables@1.20/manual/LoadContentCatalogAsync.html#updating-catalogs)
         await opHandle.Task;
         long result = opHandle.Result;
         Addressables.Release(opHandle);
@@ -75,30 +75,30 @@ public class AddressablesManager : MonoBehaviour
 
     public void LoadScene(object key)
     {
-        Addressables.LoadSceneAsync(key, LoadSceneMode.Single); // Unity автоматически вызывает UnloadUnusedAssets при загрузке сцены в режиме LoadSceneMode.Single, есть нюансы (https://docs.unity3d.com/Packages/com.unity.addressables@1.21/manual/UnloadingAddressableAssets.html)
+        Addressables.LoadSceneAsync(key, LoadSceneMode.Single); // Unity Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ UnloadUnusedAssets РїСЂРё Р·Р°РіСЂСѓР·РєРµ СЃС†РµРЅС‹ РІ СЂРµР¶РёРјРµ LoadSceneMode.Single, РµСЃС‚СЊ РЅСЋР°РЅСЃС‹ (https://docs.unity3d.com/Packages/com.unity.addressables@1.21/manual/UnloadingAddressableAssets.html)
     }
 
     private void OnDestroy()
     {
-        ReleaseAssets();    // Освободить загруженные ассеты сцены
+        ReleaseAssets();    // РћСЃРІРѕР±РѕРґРёС‚СЊ Р·Р°РіСЂСѓР¶РµРЅРЅС‹Рµ Р°СЃСЃРµС‚С‹ СЃС†РµРЅС‹
     }
 }
 
 
 [Serializable]
-public class SceneBind  // Используется для удобной загрузки сцены и её ассетов
+public class SceneBind  // РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ СѓРґРѕР±РЅРѕР№ Р·Р°РіСЂСѓР·РєРё СЃС†РµРЅС‹ Рё РµС‘ Р°СЃСЃРµС‚РѕРІ
 {
     public AssetReference reference;
     public string label;
 }
 
 [Serializable]
-public class AssetBind  // Используется для удобной загрузки ассетов и их установки
+public class AssetBind  // РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ СѓРґРѕР±РЅРѕР№ Р·Р°РіСЂСѓР·РєРё Р°СЃСЃРµС‚РѕРІ Рё РёС… СѓСЃС‚Р°РЅРѕРІРєРё
 {
     public AssetReference reference;
     public AssetType assetType;
-    public GameObject target;       // Целевой объект, связанный с загруженным ассетом
-    public bool applyAssetToTarget; // Применить ассет к целевому объекту (или обработать загруженный ассет вручную)
+    public GameObject target;       // Р¦РµР»РµРІРѕР№ РѕР±СЉРµРєС‚, СЃРІСЏР·Р°РЅРЅС‹Р№ СЃ Р·Р°РіСЂСѓР¶РµРЅРЅС‹Рј Р°СЃСЃРµС‚РѕРј
+    public bool applyAssetToTarget; // РџСЂРёРјРµРЅРёС‚СЊ Р°СЃСЃРµС‚ Рє С†РµР»РµРІРѕРјСѓ РѕР±СЉРµРєС‚Сѓ (РёР»Рё РѕР±СЂР°Р±РѕС‚Р°С‚СЊ Р·Р°РіСЂСѓР¶РµРЅРЅС‹Р№ Р°СЃСЃРµС‚ РІСЂСѓС‡РЅСѓСЋ)
 }
 
 public enum AssetType

@@ -27,9 +27,9 @@ public class CharacterScript : MonoBehaviour
     {
         if (canMove && moveInput)
         {
-            targetAngle = Mathf.Atan2(move.x, move.y) * Mathf.Rad2Deg + cameraTransform.eulerAngles.y;  // Вычислить целевой угол поворота персонажа
-            _transform.rotation = Quaternion.Euler(0f, Mathf.SmoothDampAngle(_transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime), 0f);   // Сгладить поворот персонажа
-            controller.Move(speed * Time.deltaTime * (_transform.rotation * Vector3.forward));          // Двигать персонажа по направлению его вглядя
+            targetAngle = Mathf.Atan2(move.x, move.y) * Mathf.Rad2Deg + cameraTransform.eulerAngles.y;  // Р’С‹С‡РёСЃР»РёС‚СЊ С†РµР»РµРІРѕР№ СѓРіРѕР» РїРѕРІРѕСЂРѕС‚Р° РїРµСЂСЃРѕРЅР°Р¶Р°
+            _transform.rotation = Quaternion.Euler(0f, Mathf.SmoothDampAngle(_transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime), 0f);   // РЎРіР»Р°РґРёС‚СЊ РїРѕРІРѕСЂРѕС‚ РїРµСЂСЃРѕРЅР°Р¶Р°
+            controller.Move(speed * Time.deltaTime * (_transform.rotation * Vector3.forward));          // Р”РІРёРіР°С‚СЊ РїРµСЂСЃРѕРЅР°Р¶Р° РїРѕ РЅР°РїСЂР°РІР»РµРЅРёСЋ РµРіРѕ РІРіР»СЏРґСЏ
         }
     }
 
@@ -41,14 +41,14 @@ public class CharacterScript : MonoBehaviour
         }
     }
 
-    // Вызов ввода передвижения InputSystem
+    // Р’С‹Р·РѕРІ РІРІРѕРґР° РїРµСЂРµРґРІРёР¶РµРЅРёСЏ InputSystem
     public void OnMove(InputAction.CallbackContext context)
     {
         if (canMove)
         {
             move = context.ReadValue<Vector2>();
             moveInput = move.y != 0 || move.x != 0;
-            animator.SetBool("isRunning", canMove && moveInput);  // Включить/выключить анимацию бега
+            animator.SetBool("isRunning", canMove && moveInput);  // Р’РєР»СЋС‡РёС‚СЊ/РІС‹РєР»СЋС‡РёС‚СЊ Р°РЅРёРјР°С†РёСЋ Р±РµРіР°
         }
     }
 
@@ -64,7 +64,7 @@ public class CharacterScript : MonoBehaviour
 
     public void OnExit(InputAction.CallbackContext context)
     {
-        Cursor.lockState = CursorLockMode.None; // Вернуть курсор перед выходом
+        Cursor.lockState = CursorLockMode.None; // Р’РµСЂРЅСѓС‚СЊ РєСѓСЂСЃРѕСЂ РїРµСЂРµРґ РІС‹С…РѕРґРѕРј
         SceneManager.LoadScene("Menu");
     }
 }
