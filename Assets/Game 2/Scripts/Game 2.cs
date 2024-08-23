@@ -3,11 +3,14 @@ using TMPro;
 
 public class Game2 : MonoBehaviour
 {
-    private static Game2 instance;
+    private const string BestTime = "bestTime"; // Название переменной, которая хранится в Unity CloudSave
 
-    public int characterAssetIndex;
-    public GameObject resultPanel;
-    public TMP_Text timeText;
+    public static Game2 instance;
+
+    [SerializeField] private int characterAssetIndex;
+    [SerializeField] private GameObject resultPanel;
+    [SerializeField] private TMP_Text timeText;
+
     private AddressablesManager addressablesManager;
     private CharacterScript character;
     private Transform characterTransform;
@@ -20,9 +23,9 @@ public class Game2 : MonoBehaviour
         instance = this;
         addressablesManager = GetComponentInParent<AddressablesManager>();
         await addressablesManager.LoadAssetsAsync();
-        character = Instantiate((GameObject)addressablesManager.assetBinds[characterAssetIndex].reference.Asset).GetComponent<CharacterScript>();
+        character = Instantiate((GameObject)addressablesManager.AssetBinds[characterAssetIndex].reference.Asset).GetComponent<CharacterScript>();
         characterTransform = character.transform;
-        bestTime = await DataManager.LoadDataAsync<float>("bestTime");
+        bestTime = await DataManager.LoadDataAsync<float>(BestTime);
         if (bestTime == default)    // Оффлайн режим (можно сообщить об этом игроку)
         {
             bestTime = float.MaxValue;
@@ -30,7 +33,7 @@ public class Game2 : MonoBehaviour
         StartGame();
     }
 
-    private void _ShowResult()
+    public void ShowResult()
     {
         character.CanMove(false);
         Cursor.lockState = CursorLockMode.None;
@@ -39,14 +42,9 @@ public class Game2 : MonoBehaviour
         if (currentTime < bestTime)
         {
             bestTime = currentTime;
-            _ = DataManager.SaveDataAsync("bestTime", bestTime);    // При ошибке сети не сохранится (можно обработать, сообщив от этом игроку)
+            _ = DataManager.SaveDataAsync(BestTime, bestTime);    // При ошибке сети не сохранится (можно обработать, сообщив от этом игроку)
         }
         timeText.text = $"Время: {currentTime:f1}с\r\n\r\nЛучшее время: {bestTime:f1}с";
-    }
-
-    public static void ShowResult()
-    {
-        instance._ShowResult();
     }
 
     public void StartGame()

@@ -4,37 +4,37 @@ using Unity.Services.Authentication;
 using Unity.Services.CloudSave;
 using Unity.Services.CloudSave.Models;
 using Unity.Services.Core;
-using UnityEngine;
 
-public class DataManager : MonoBehaviour
+public static class DataManager
 {
-    private static bool error;
-    private static Dictionary<string, object> data = new Dictionary<string, object>();
+    private static bool isError;
+    private static readonly Dictionary<string, object> data = new Dictionary<string, object>();
 
 
-    public static async Task<bool> SignInAsync()
+    public static async Task<bool> SignInAsync(string username, string password)
     {
         try
         {
+            // Для сохранения/загрузки данных используется сервис Unity CloudSave
             await UnityServices.InitializeAsync();
             if (!AuthenticationService.Instance.IsSignedIn)
             {
-                await AuthenticationService.Instance.SignInWithUsernamePasswordAsync("user1", "User1234!");  // Войти под тестовым пользователем
+                await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(username, password);
             }
         }
         catch
         {
-            error = true;
+            isError = true;
             return false;
         }
 
-        error = false;  // Сбросить ошибку для возможности сохранения
+        isError = false;    // Сбросить ошибку для возможности сохранения
         return true;
     }
 
     public static async Task<bool> SaveDataAsync<T>(string key, T value)
     {
-        if (error)  // Не сохранять на сервер
+        if (isError)    // Не сохранять на сервер
         {
             return false;
         }
@@ -47,7 +47,7 @@ public class DataManager : MonoBehaviour
         }
         catch
         {
-            error = true;
+            isError = true;
             return false;
         }
     }
@@ -61,7 +61,7 @@ public class DataManager : MonoBehaviour
         }
         catch
         {
-            error = true;
+            isError = true;
             return default;
         }
     }

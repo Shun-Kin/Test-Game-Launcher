@@ -5,14 +5,18 @@ using UnityEngine.UI;
 
 public class LauncherManager : MonoBehaviour
 {
-    public List<GameButtons> buttons;
+    [SerializeField] private List<GameButtons> buttons;
+    // Данные пользователя для подключения к сервису
+    [SerializeField] private string username;
+    [SerializeField] private string password;
+
     private AddressablesManager addressablesManager;
 
 
     private async void Start()
     {
         addressablesManager = GetComponentInParent<AddressablesManager>();
-        if (await DataManager.SignInAsync())    // Игрок смог войти/подключиться или уже вошёл
+        if (await DataManager.SignInAsync(username, password))  // Игрок смог войти/подключиться или уже вошёл
         {
             foreach (GameButtons button in buttons)
             {
@@ -20,14 +24,14 @@ public class LauncherManager : MonoBehaviour
             }
         }
 
-        buttons[0].start.interactable = await addressablesManager.InCacheAsync(addressablesManager.sceneBinds[0].label);    // Проверить наличие ассетов игр в кэше (проверяется по очереди)
-        buttons[1].start.interactable = await addressablesManager.InCacheAsync(addressablesManager.sceneBinds[1].label);
+        buttons[0].start.interactable = await addressablesManager.InCacheAsync(addressablesManager.SceneBinds[0].label);    // Проверить наличие ассетов игр в кэше (проверяется по очереди)
+        buttons[1].start.interactable = await addressablesManager.InCacheAsync(addressablesManager.SceneBinds[1].label);
     }
 
     private async void DownloadGame(int index)
     {
         buttons[index].download.interactable = false;
-        buttons[index].start.interactable = await addressablesManager.DownloadAssetsAsync(addressablesManager.sceneBinds[index].label); // Скачать ассеты игры с сервера
+        buttons[index].start.interactable = await addressablesManager.DownloadAssetsAsync(addressablesManager.SceneBinds[index].label); // Скачать ассеты игры с сервера
         buttons[index].download.interactable = true;
     }
 
@@ -35,13 +39,13 @@ public class LauncherManager : MonoBehaviour
     {
         buttons[index].unload.interactable = false;
         buttons[index].start.interactable = false;
-        await addressablesManager.UnloadAssetsCacheAsync(addressablesManager.sceneBinds[index].label);  // Очистить кэш игры
+        await addressablesManager.UnloadAssetsCacheAsync(addressablesManager.SceneBinds[index].label);  // Очистить кэш игры
         buttons[index].unload.interactable = true;
     }
 
     private void StartGame(int index)
     {
-        addressablesManager.LoadScene(addressablesManager.sceneBinds[index].reference); // Загрузить сцену игры
+        addressablesManager.LoadScene(addressablesManager.SceneBinds[index].reference); // Загрузить сцену игры
     }
 
     // Game 1
@@ -76,6 +80,7 @@ public class LauncherManager : MonoBehaviour
         StartGame(1);
     }
 }
+
 
 [Serializable]
 public class GameButtons

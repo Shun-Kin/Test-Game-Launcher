@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public class PointerHandler : MonoBehaviour, IPointerDownHandler
 {
-    public UnityEvent onPointerDown;
+    [SerializeField] private UnityEvent onPointerDown;
 
 
     public void OnPointerDown(PointerEventData eventData)

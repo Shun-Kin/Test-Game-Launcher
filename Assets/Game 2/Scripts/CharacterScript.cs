@@ -4,51 +4,54 @@ using UnityEngine.SceneManagement;
 
 public class CharacterScript : MonoBehaviour
 {
-	public CharacterController controller;
-    public Animator animator;
-    public float speed;
-    public float turnSmoothTime;
-    private Transform _transform;
+    private const string FinishTag = "Finish";
+
+	[SerializeField] private CharacterController controller;
+    [SerializeField] private Animator animator;
+    [SerializeField] private float speed;
+    [SerializeField] private float turnSmoothTime;
+
+    private Transform transformCached;
     private Transform cameraTransform;
     private float targetAngle;
     private float turnSmoothVelocity;
-    private Vector2 move;
-    private bool moveInput;
+    private Vector2 moveInput;
+    private bool isMove;
     private bool canMove;
 
 
     private void Start()
     {
-        _transform = transform;
+        transformCached = transform;
         cameraTransform = Camera.main.transform;
     }
 
     private void Update()
     {
-        if (canMove && moveInput)
+        if (canMove && isMove)
         {
-            targetAngle = Mathf.Atan2(move.x, move.y) * Mathf.Rad2Deg + cameraTransform.eulerAngles.y;  // Вычислить целевой угол поворота персонажа
-            _transform.rotation = Quaternion.Euler(0f, Mathf.SmoothDampAngle(_transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime), 0f);   // Сгладить поворот персонажа
-            controller.Move(speed * Time.deltaTime * (_transform.rotation * Vector3.forward));          // Двигать персонажа по направлению его вглядя
+            targetAngle = Mathf.Atan2(moveInput.x, moveInput.y) * Mathf.Rad2Deg + cameraTransform.eulerAngles.y;    // Вычислить целевой угол поворота персонажа
+            transformCached.rotation = Quaternion.Euler(0f, Mathf.SmoothDampAngle(transformCached.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime), 0f); // Сгладить поворот персонажа
+            controller.Move(speed * Time.deltaTime * (transformCached.rotation * Vector3.forward));                 // Двигать персонажа по направлению его вглядя
         }
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (hit.gameObject.CompareTag("Finish"))
+        if (hit.gameObject.CompareTag(FinishTag))
         {
-            Game2.ShowResult();
+            Game2.instance.ShowResult();
         }
     }
 
-    // Вызов ввода передвижения InputSystem
-    public void OnMove(InputAction.CallbackContext context)
+    /// <summary>Обрабатывает ввод передвижения InputSystem</summary>
+    private void OnMove(InputAction.CallbackContext context)
     {
         if (canMove)
         {
-            move = context.ReadValue<Vector2>();
-            moveInput = move.y != 0 || move.x != 0;
-            animator.SetBool("isRunning", canMove && moveInput);  // Включить/выключить анимацию бега
+            moveInput = context.ReadValue<Vector2>();
+            isMove = moveInput.y != 0 || moveInput.x != 0;
+            animator.SetBool("isRunning", canMove && isMove);  // Включить/выключить анимацию бега
         }
     }
 
@@ -57,12 +60,12 @@ public class CharacterScript : MonoBehaviour
         canMove = value;
         if (!canMove)
         {
-            moveInput = false;
+            isMove = false;
             animator.SetBool("isRunning", false);
         }
     }
 
-    public void OnExit(InputAction.CallbackContext context)
+    public void OnExit(InputAction.CallbackContext _)
     {
         Cursor.lockState = CursorLockMode.None; // Вернуть курсор перед выходом
         SceneManager.LoadScene("Menu");

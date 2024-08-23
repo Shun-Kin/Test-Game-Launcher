@@ -9,8 +9,18 @@ using UnityEngine.UI;
 
 public class AddressablesManager : MonoBehaviour
 {
-    public List<SceneBind> sceneBinds;
-    public List<AssetBind> assetBinds;
+    [SerializeField] private List<SceneBind> sceneBinds;
+    [SerializeField] private List<AssetBind> assetBinds;
+
+
+    public List<SceneBind> SceneBinds
+    {
+        get { return sceneBinds; }
+    }
+    public List<AssetBind> AssetBinds
+    {
+        get { return assetBinds; }
+    }
 
 
     public async Task<bool> InCacheAsync(object key)
@@ -65,14 +75,6 @@ public class AddressablesManager : MonoBehaviour
         }
     }
 
-    private void ReleaseAssets()
-    {
-        foreach (AssetBind assetBind in assetBinds)
-        {
-            assetBind.reference.ReleaseAsset();
-        }
-    }
-
     public void LoadScene(object key)
     {
         Addressables.LoadSceneAsync(key, LoadSceneMode.Single); // Unity автоматически вызывает UnloadUnusedAssets при загрузке сцены в режиме LoadSceneMode.Single, есть нюансы (https://docs.unity3d.com/Packages/com.unity.addressables@1.21/manual/UnloadingAddressableAssets.html)
@@ -80,20 +82,25 @@ public class AddressablesManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        ReleaseAssets();    // Освободить загруженные ассеты сцены
+        foreach (AssetBind assetBind in assetBinds)
+        {
+            assetBind.reference.ReleaseAsset();
+        }
     }
 }
 
 
+/// <summary>Используется для удобной загрузки сцены и её ассетов</summary>
 [Serializable]
-public class SceneBind  // Используется для удобной загрузки сцены и её ассетов
+public class SceneBind
 {
     public AssetReference reference;
     public string label;
 }
 
+/// <summary>Используется для удобной загрузки ассетов и их установки</summary>
 [Serializable]
-public class AssetBind  // Используется для удобной загрузки ассетов и их установки
+public class AssetBind
 {
     public AssetReference reference;
     public AssetType assetType;

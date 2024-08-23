@@ -575,7 +575,7 @@ GameObject:
   - component: {fileID: 700372200}
   - component: {fileID: 700372199}
   m_Layer: 5
-  m_Name: Load Button
+  m_Name: Download Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1302,7 +1302,6 @@ GameObject:
   - component: {fileID: 1057284431}
   - component: {fileID: 1057284432}
   - component: {fileID: 1057284433}
-  - component: {fileID: 1057284434}
   m_Layer: 0
   m_Name: LauncherManager
   m_TagString: Untagged
@@ -1344,6 +1343,8 @@ MonoBehaviour:
   - start: {fileID: 1688629161}
     download: {fileID: 700372199}
     unload: {fileID: 948248355}
+  username: user1
+  password: User1234!
 --- !u!114 &1057284433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1370,18 +1371,6 @@ MonoBehaviour:
       m_EditorAssetChanged: 0
     label: Game 2
   assetBinds: []
---- !u!114 &1057284434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1057284430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fbb131ab9d7b114e83f89bf1bdf5aad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1243446169
 GameObject:
   m_ObjectHideFlags: 0
@@ -1395,7 +1384,7 @@ GameObject:
   - component: {fileID: 1243446172}
   - component: {fileID: 1243446171}
   m_Layer: 5
-  m_Name: Load Button
+  m_Name: Download Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
