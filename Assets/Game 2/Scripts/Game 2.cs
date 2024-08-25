@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using Cysharp.Threading.Tasks;
 
 public class Game2 : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class Game2 : MonoBehaviour
     {
         instance = this;
         addressablesManager = GetComponentInParent<AddressablesManager>();
-        await addressablesManager.LoadAssetsAsync();
+        await addressablesManager.LoadAssetsAsync(destroyCancellationToken);
         character = Instantiate((GameObject)addressablesManager.AssetBinds[characterAssetIndex].reference.Asset).GetComponent<CharacterScript>();
         characterTransform = character.transform;
         bestTime = await DataManager.LoadDataAsync<float>(BestTime);
@@ -42,7 +43,7 @@ public class Game2 : MonoBehaviour
         if (currentTime < bestTime)
         {
             bestTime = currentTime;
-            _ = DataManager.SaveDataAsync(BestTime, bestTime);    // При ошибке сети не сохранится (можно обработать, сообщив от этом игроку)
+            DataManager.SaveDataAsync(BestTime, bestTime).Forget();    // При ошибке сети не сохранится (можно обработать, сообщив от этом игроку)
         }
         timeText.text = $"Время: {currentTime:f1}с\r\n\r\nЛучшее время: {bestTime:f1}с";
     }

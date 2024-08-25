@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -23,55 +24,96 @@ public class AddressablesManager : MonoBehaviour
     }
 
 
-    public async Task<bool> InCacheAsync(object key)
+    public async UniTask<bool> InCacheAsync(object key, CancellationToken cancellationToken)
     {
         AsyncOperationHandle<long> opHandle = Addressables.GetDownloadSizeAsync(key);   // Проверка обновлений каталогов происходит автоматически при инициализации Addressables, можно проверить вручную (Addressable Asset Settings -> Only update catalogs manually https://docs.unity3d.com/Packages/com.unity.addressables@1.20/manual/LoadContentCatalogAsync.html#updating-catalogs)
-        await opHandle.Task;
-        long result = opHandle.Result;
-        Addressables.Release(opHandle);
-        return result == 0;
+
+        try
+        {
+            return await opHandle.ToUniTask(cancellationToken: cancellationToken) == 0;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError(ex.Message);
+            return false;
+        }
+        finally
+        {
+            Addressables.Release(opHandle);
+        }
     }
 
-    public async Task<bool> DownloadAssetsAsync(object key)
+    public async UniTask<bool> DownloadAssetsAsync(object key, CancellationToken cancellationToken)
     {
         AsyncOperationHandle opHandle = Addressables.DownloadDependenciesAsync(key, false);
-        await opHandle.Task;
-        bool result = opHandle.Status == AsyncOperationStatus.Succeeded;
-        Addressables.Release(opHandle);
-        return result;
+
+        try
+        {
+            await opHandle.ToUniTask(cancellationToken: cancellationToken);
+            return opHandle.Status == AsyncOperationStatus.Succeeded;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError(ex.Message);
+            return false;
+        }
+        finally
+        {
+            Addressables.Release(opHandle);
+        }
     }
 
-    public async Task UnloadAssetsCacheAsync(object key)
+    public async UniTask UnloadAssetsCacheAsync(object key, CancellationToken cancellationToken)
     {
         AsyncOperationHandle opHandle = Addressables.ClearDependencyCacheAsync(key, false);
-        await opHandle.Task;
-        Addressables.Release(opHandle);
+
+        try
+        {
+            await opHandle.ToUniTask(cancellationToken: cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError(ex.Message);
+        }
+        finally
+        {
+            Addressables.Release(opHandle);
+        }
     }
 
-    public async Task LoadAssetsAsync()
+    public async UniTask LoadAssetsAsync(CancellationToken cancellationToken)
     {
-        foreach (AssetBind assetBind in assetBinds)
-        {
-            switch (assetBind.assetType)
-            {
-                case AssetType.Sprite:
-                    AsyncOperationHandle<Sprite> opSpriteHandle = assetBind.reference.LoadAssetAsync<Sprite>();
-                    await opSpriteHandle.Task;
-                    if (assetBind.applyAssetToTarget)
-                    {
-                        assetBind.target.GetComponentInParent<Image>().sprite = opSpriteHandle.Result;
-                    }
-                    break;
+        AsyncOperationHandle opHandle;
 
-                case AssetType.Prefab:
-                    AsyncOperationHandle<GameObject> opGOHandle = assetBind.reference.LoadAssetAsync<GameObject>();
-                    await opGOHandle.Task;
-                    if (assetBind.applyAssetToTarget)
-                    {
-                        Instantiate(opGOHandle.Result, assetBind.target.transform);
-                    }
-                    break;
+        try
+        {
+            foreach (AssetBind assetBind in assetBinds)
+            {
+                switch (assetBind.assetType)
+                {
+                    case AssetType.Sprite:
+                        opHandle = assetBind.reference.LoadAssetAsync<Sprite>();
+                        await opHandle.ToUniTask(cancellationToken: cancellationToken);
+                        if (assetBind.applyAssetToTarget)
+                        {
+                            assetBind.target.GetComponentInParent<Image>().sprite = opHandle.Result as Sprite;
+                        }
+                        break;
+
+                    case AssetType.Prefab:
+                        opHandle = assetBind.reference.LoadAssetAsync<GameObject>();
+                        await opHandle.ToUniTask(cancellationToken: cancellationToken);
+                        if (assetBind.applyAssetToTarget)
+                        {
+                            Instantiate(opHandle.Result as GameObject, assetBind.target.transform);
+                        }
+                        break;
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError(ex.Message);
         }
     }
 

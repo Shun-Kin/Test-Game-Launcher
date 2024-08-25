@@ -24,14 +24,14 @@ public class LauncherManager : MonoBehaviour
             }
         }
 
-        buttons[0].start.interactable = await addressablesManager.InCacheAsync(addressablesManager.SceneBinds[0].label);    // Проверить наличие ассетов игр в кэше (проверяется по очереди)
-        buttons[1].start.interactable = await addressablesManager.InCacheAsync(addressablesManager.SceneBinds[1].label);
+        buttons[0].start.interactable = await addressablesManager.InCacheAsync(addressablesManager.SceneBinds[0].label, destroyCancellationToken);  // Проверить наличие ассетов игр в кэше (проверяется по очереди)
+        buttons[1].start.interactable = await addressablesManager.InCacheAsync(addressablesManager.SceneBinds[1].label, destroyCancellationToken);
     }
 
     private async void DownloadGame(int index)
     {
         buttons[index].download.interactable = false;
-        buttons[index].start.interactable = await addressablesManager.DownloadAssetsAsync(addressablesManager.SceneBinds[index].label); // Скачать ассеты игры с сервера
+        buttons[index].start.interactable = await addressablesManager.DownloadAssetsAsync(addressablesManager.SceneBinds[index].label, destroyCancellationToken);   // Скачать ассеты игры с сервера
         buttons[index].download.interactable = true;
     }
 
@@ -39,7 +39,7 @@ public class LauncherManager : MonoBehaviour
     {
         buttons[index].unload.interactable = false;
         buttons[index].start.interactable = false;
-        await addressablesManager.UnloadAssetsCacheAsync(addressablesManager.SceneBinds[index].label);  // Очистить кэш игры
+        await addressablesManager.UnloadAssetsCacheAsync(addressablesManager.SceneBinds[index].label, destroyCancellationToken);    // Очистить кэш игры
         buttons[index].unload.interactable = true;
     }
 
